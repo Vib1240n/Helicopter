@@ -2,9 +2,12 @@ package org.csc133.a1;
 
 import static com.codename1.ui.CN.*;
 
+import javax.print.attribute.standard.DialogTypeSelection;
+
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.system.Lifecycle;
 import com.codename1.ui.*;
+import com.codename1.ui.geom.Point;
 import com.codename1.ui.layouts.*;
 import com.codename1.io.*;
 import com.codename1.ui.plaf.*;
@@ -44,6 +47,16 @@ public class AppMain extends Lifecycle {
 class Game extends Form implements Runnable {
 
     gameWorld world;
+    final static int Disp_H = Display.getInstance().getDisplayHeight();
+    final static int Disp_W = Display.getInstance().getDisplayWidth();
+
+    public static int getMin_disp(){
+        return Math.min(Disp_H, Disp_W);
+    }
+
+    public static int getMax_disp(){
+        return Math.max(Disp_H, Disp_W);
+    }
 
     public Game() {
         world = new gameWorld();
@@ -55,7 +68,7 @@ class Game extends Form implements Runnable {
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(ColorUtil.BLACK);
-        g.fillRect(0, 0, Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
+        g.fillRect(0, 0, Game.Disp_W, Game.Disp_H);
         world.draw(g);
     }
 
@@ -71,43 +84,83 @@ class gameWorld {
 
     Helicopter heli;
     HeliPad pad;
+    River river;
 
     public gameWorld() {
         heli = new Helicopter();
         pad = new HeliPad();
+        river = new River();
     }
 
     public void draw(Graphics g) {
         heli.draw(g);
         pad.draw(g);
+        river.draw(g);
+
     }
 
 }
+
+
 
 class Fire {
 
 }
 
 class Helicopter {
+    Point location;
+
+    public Helicopter(){
+        location = new Point(Game.Disp_W/2, Game.Disp_H/2);
+    }
 
     public void draw(Graphics g) {
-        // g.drawArc(x, y, width, height, startAngle, arcAngle);
+
+        g.setColor(ColorUtil.YELLOW);
+        g.fillArc(location.getX()*(25/100),
+                    Game.getMin_disp() / 2
+                        + 775, 35, 35, 0, 360);
+        
+        g.setColor(ColorUtil.YELLOW);
+        g.drawLine(Game.Disp_W/2 , Game.Disp_H, Game.Disp_W + 15, Game.Disp_H);
     }
 }
 
 class HeliPad {
+    Point location;
+
+    public HeliPad(){
+        location = new Point(Game.Disp_W / 2, Game.Disp_H / 2);
+    }
 
     public void draw(Graphics g) {
+        /*
+            Helipad border design
+        */
         g.setColor(ColorUtil.GRAY);
         g.drawRect(
-                ((Display.getInstance().getDisplayWidth()) / 2) - 100,
-                ((Math.min((Display.getInstance().getDisplayHeight()), (Display.getInstance().getDisplayWidth())) / 2)
-                        + 1000),
+                location.getX() - 100,
+                ((Game.getMin_disp() / 2) + 700),
                 200, 200);
+        /*
+            Helipad inner circle design 
+         */
+        g.setColor(ColorUtil.GRAY);
+        g.drawArc((Game.Disp_W / 2 ) - 75,
+                   ((Game.Disp_H / 2)+725), 
+        150, 150,
+        0, 360);
     }
 
 }
 
 class River {
+
+    public void draw(Graphics g) {
+
+        g.setColor(ColorUtil.BLUE);
+        g.drawRect(-100, Game.Disp_W / 8, 
+        Game.Disp_W*2 , Game.Disp_H / 8);
+    }
 
 }
