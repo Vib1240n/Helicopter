@@ -2,11 +2,15 @@ package org.csc133.a1;
 
 import static com.codename1.ui.CN.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.print.attribute.standard.DialogTypeSelection;
 
 import com.codename1.charts.util.ColorUtil;
 import com.codename1.system.Lifecycle;
 import com.codename1.ui.*;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.layouts.*;
 import com.codename1.io.*;
@@ -46,10 +50,17 @@ public class AppMain extends Lifecycle {
 
 class Game extends Form implements Runnable {
 
-    gameWorld world;
+    private gameWorld world;
     final static int Disp_H = Display.getInstance().getDisplayHeight();
     final static int Disp_W = Display.getInstance().getDisplayWidth();
+    
+    public Game() {
+        world = new gameWorld();
+        UITimer timer = new UITimer(this);
+        timer.schedule(100, true, this);
+        
 
+    }
     public static int getMin_disp(){
         return Math.min(Disp_H, Disp_W);
     }
@@ -58,12 +69,6 @@ class Game extends Form implements Runnable {
         return Math.max(Disp_H, Disp_W);
     }
 
-    public Game() {
-        world = new gameWorld();
-        UITimer timer = new UITimer(this);
-        timer.schedule(100, true, this);
-
-    }
 
     public void paint(Graphics g) {
         super.paint(g);
@@ -78,6 +83,10 @@ class Game extends Form implements Runnable {
 
     }
 
+    public void addKeyListener(int keyCode, ActionListener listener){
+
+    }
+
 }
 
 class gameWorld {
@@ -85,17 +94,20 @@ class gameWorld {
     Helicopter heli;
     HeliPad pad;
     River river;
+    Fire fire;
 
     public gameWorld() {
         heli = new Helicopter();
         pad = new HeliPad();
         river = new River();
+        fire = new Fire();
     }
 
     public void draw(Graphics g) {
         heli.draw(g);
         pad.draw(g);
         river.draw(g);
+        fire.draw(g);        
 
     }
 
@@ -104,6 +116,27 @@ class gameWorld {
 
 
 class Fire {
+    Point Location;
+
+    public Fire(){
+        Location = new Point(Game.Disp_W/2, Game.Disp_H/2);
+    }
+
+    public void draw(Graphics g) {
+        int radius = 100;
+
+        g.setColor(ColorUtil.MAGENTA);
+        g.fillArc(x, y, width, height, 0, 360);
+
+    }
+
+    public int[] UpdateLocation(){
+        int[] updateLocation = {0,0};
+
+        return updateLocation;
+    } 
+
+
 
 }
 
@@ -155,6 +188,7 @@ class HeliPad {
 }
 
 class River {
+    Point Location;     
 
     public void draw(Graphics g) {
 
