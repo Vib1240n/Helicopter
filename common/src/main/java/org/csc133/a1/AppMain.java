@@ -52,6 +52,9 @@ public class AppMain extends Lifecycle {
 class Game extends Form implements Runnable {
 
     private gameWorld world;
+    private int tick;
+    private int return_tick;
+    UITimer timer;
     final static int Disp_H = Display.getInstance().getDisplayHeight();
     final static int Disp_W = Display.getInstance().getDisplayWidth();
     static Font font = Font.createSystemFont(Font.FACE_SYSTEM,
@@ -77,12 +80,14 @@ class Game extends Form implements Runnable {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        world.updateTick();
+        return_tick = Tick();
+        world.updateTick(return_tick);
         repaint();
     }
     public Game() {
         world = new gameWorld();
-        UITimer timer = new UITimer(this);
+        tick = 0;
+        timer = new UITimer(this);
         timer.schedule(100, true, this);
         addKeyListener('Q', (evt) -> world.quit());
         addKeyListener(-93, (evt) -> Helicopter.movement(-93));
@@ -90,9 +95,12 @@ class Game extends Form implements Runnable {
         addKeyListener(-91, (evt) -> Helicopter.movement(-91));
         addKeyListener(-92, (evt) -> Helicopter.movement(-92));
         addKeyListener('d', (evt) -> Helicopter.fillTank());
-        
-
     }
+    public int Tick(){
+        tick++;
+        return tick;
+    }
+
     
 }
 class Helicopter extends HeliPad {
@@ -122,8 +130,8 @@ class Helicopter extends HeliPad {
         angle = Math.toRadians(90);
         endX = location.getX();
         endY = location.getY() + heli_radius*3 ;
-        startX =location.getX();
-        startY =location.getY();
+        startX = location.getX();
+        startY = location.getY();
     }
     
     public static void movement(int input){
@@ -136,20 +144,20 @@ class Helicopter extends HeliPad {
                     speed--;
                 }
                 break;
-            case -91:
+            case -91 /*Forward */:
                 if (speed < 10) {
                     speed++;
                 }
                 break;
             case -93 /*Left*/:
                 angle += Math.toRadians(15);
-                endX= (int)(endX + Math.cos(angle) + heli_radius * 3);
+                endX= (int)(endX + Math.cos(angle));
                 endY = (int) (endY - Math.sin(angle));
                 break;
             case -94 /*Right */:
                 angle -= Math.toRadians(15);
                 endY = (int)(endX - Math.sin(angle));
-                endX = (int) (endY + Math.cos(angle) + heli_radius * 3);
+                endX = (int) (endY + Math.cos(angle));
                 break;
             default: 
                 
@@ -177,7 +185,7 @@ class Helicopter extends HeliPad {
                 endX, endY);
     }
     public static void isCollison(){
-        if((startX > river_location.getX() && startY > river_location.getY()) &&(startX < Game.Disp_W*2 + river_location.getX() && startY < Game.Disp_H / 8 + river_location.getY())){
+        if((startX < river_location.getX() && startY < river_location.getY()) &&(startX > Game.Disp_W*2 + river_location.getX() && startY > Game.Disp_H / 8 + river_location.getY())){
             isColliding = true;
         }
     }
@@ -207,27 +215,45 @@ class gameWorld {
     private int fire_size_right;
 
     public gameWorld() {
+        /**
+         * Initiliazing variables
+         */
         heli = new Helicopter();
         pad = new HeliPad();
         river = new River();
-        rand = random.nextInt(50);
-        location_left = new Point(rand+Game.Disp_W / 5, Game.Disp_H / 4 - Game.Disp_H / 4);
-        location_right = new Point(rand+Game.Disp_W, Game.Disp_H / 2 - Game.Disp_W - 2);
-        location_center = new Point(rand+Game.Disp_W, Game.Disp_H);
-        fire_size_center = random.nextInt(500);
-        fire_size_left = random.nextInt(200);
-        fire_size_right = random.nextInt(600);
-
-        fire_center = new Fire(fire_size_center, location_center);
-        fire_left = new Fire(fire_size_left, location_left);
-        fire_right = new Fire(fire_size_right, location_right);
+        rand = random.nextInt(500)/150;
+        /*
+        Fire Locations
+         */
+        location_left = new Point(rand + Game.Disp_W / 5, rand + Game.Disp_H / 4 - Game.Disp_H / 4);
+        location_right = new Point(rand + Game.Disp_W, rand + Game.Disp_H / 2 - Game.Disp_W - 2);
+        location_center = new Point(rand + Game.Disp_W, rand + Game.Disp_H/2);
+        /**
+         * Fire Sizes
+         */
+        fire_size_center = random.nextInt(500) + 300;
+        fire_size_left = random.nextInt(200) + 100;
+        fire_size_right = random.nextInt(500) + 200;
+        /**
+         * Fires on the screen; class objects
+         */
+        // fire_center = new Fire(fire_size_center, location_center);
+        // fire_left = new Fire(fire_size_left, location_left);
+        // fire_right = new Fire(fire_size_right, location_right);
         fires = new ArrayList<>();
-        fires.add(fire_center);
-        fires.add(fire_left);
-        fires.add(fire_right);
+        /**
+         * Adding fire locations and sizes into fire class objects 
+         */
+        fires.add(new Fire(fire_size_center, location_center));
+        fires.add(new Fire(fire_size_left, location_left));
+        fires.add(new Fire(fire_size_right, location_right));
 
     }
 
+    /**
+     * 
+     * @param g
+     */
     public void draw(Graphics g) {
         heli.draw(g);
         pad.draw(g);
@@ -235,17 +261,19 @@ class gameWorld {
         for(Fire fire: fires){
             fire.draw(g);
         }      
-
     }
 
     public void quit(){
         Display.getInstance().exitApplication();
     }
-    public void updateTick(){
+
+    public void updateTick(int timer){
         Helicopter.updateForward();
-        fire_center.grow_fire();
-        fire_left.grow_fire();
-        fire_right.grow_fire();
+        if(timer%2 == 0){
+            fire_center.grow_fire();
+            fire_left.grow_fire();
+            fire_right.grow_fire();
+        }
         Helicopter.isCollison();
     }
 
@@ -265,14 +293,20 @@ class Fire {
 
     }
 
+    public void grow_fire(){
+        if(fire_size < 470){
+            fire_size += new Random().nextInt(5);
+        }
+    }
     public void draw(Graphics g) {
         g.setColor(ColorUtil.MAGENTA);
         g.fillArc(Location.getX(), Location.getY(), fire_size, fire_size, 0, 360);
-
+        g.setFont(Game.font);
+        g.drawString(""+fire_size, Location.getX()+fire_size + 10, Location.getY()+ fire_size + 5);
+        // g.drawString("" + Location.getX(), Location.getX() + fire_size + 10, Location.getY() + fire_size + 30);
+        // g.drawString("" + Location.getY(), Location.getX() + fire_size + 10, Location.getY() + fire_size + 30);
+    
     } 
-    public void grow_fire(){
-        fire_size += new Random().nextInt(5);
-    }
 }
 
 
@@ -317,6 +351,13 @@ class River {
 
     public Point getLocation(){
         return Location;
+    }
+    public int get_river_width(){
+        return -100;
+    }
+
+    public int get_river_height(){
+        return Game.Disp_W/8;
     }
 
     public void draw(Graphics g) {
