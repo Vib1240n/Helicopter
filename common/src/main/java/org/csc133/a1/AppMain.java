@@ -28,6 +28,7 @@ public class AppMain extends Lifecycle {
 
     @Override
     public void runApp() {
+
     }
 
     public void start() {
@@ -73,7 +74,8 @@ class Game extends Form implements Runnable {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        
+        world.updateTick();
+        repaint();
     }
     public Game() {
         world = new gameWorld();
@@ -117,21 +119,25 @@ class Helicopter extends HeliPad {
         */
         switch(input){
             case -92 /* back */:
-                if(speed > 10){
+                if(speed > 0){
                     speed--;
                 }
+                break;
             case -91:
                 if (speed < 10) {
                     speed++;
                 }
+                break;
             case -93 /*Left*/:
                 angle += Math.toRadians(15);
                 endX= (int)(centerLocation.getX() + Math.sin(angle)+ heli_radius *3);
                 endY = (int) (centerLocation.getY() - Math.cos(angle) + heli_radius * 3);
+                break;
             case -94 /*Right */:
                 angle -= Math.toRadians(15);
                 endY = (int)(centerLocation.getY() - Math.cos(angle) + heli_radius *3);
                 endX = (int) (centerLocation.getX() + Math.sin(angle) + heli_radius * 3);
+                break;
             default: 
                 
         }

@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="HornetsHFD-A1-javase" />
         <module name="HornetsHFD-A1-common" />
+        <module name="HornetsHFD-A1-javase" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="HornetsHFD-A1" target="8" />
+      <module name="HornetsHFD-A1" target="1.8" />
       <module name="HornetsHFD-A1-common" target="1.8" />
       <module name="HornetsHFD-A1-javase" target="1.8" />
     </bytecodeTargetLevel>
