@@ -54,39 +54,107 @@ class Game extends Form implements Runnable {
     final static int Disp_H = Display.getInstance().getDisplayHeight();
     final static int Disp_W = Display.getInstance().getDisplayWidth();
     
-    public Game() {
-        world = new gameWorld();
-        UITimer timer = new UITimer(this);
-        timer.schedule(100, true, this);
-        
-
-    }
     public static int getMin_disp(){
         return Math.min(Disp_H, Disp_W);
     }
-
+    
     public static int getMax_disp(){
         return Math.max(Disp_H, Disp_W);
     }
-
-
+    
+    
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(ColorUtil.BLACK);
         g.fillRect(0, 0, Game.Disp_W, Game.Disp_H);
         world.draw(g);
     }
-
+    
     @Override
     public void run() {
         // TODO Auto-generated method stub
+        
+    }
+    public Game() {
+        world = new gameWorld();
+        UITimer timer = new UITimer(this);
+        timer.schedule(100, true, this);
+        addKeyListener('Q', (evt) -> world.quit());
+        addKeyListener(-93, (evt) -> Helicopter.movement(-93));
+        addKeyListener(-94, (evt) -> Helicopter.movement(-94));
+        addKeyListener(-91, (evt) -> Helicopter.movement(-91));
+        addKeyListener(-92, (evt) -> Helicopter.movement(-92));
+        
 
     }
+    
+}
+class Helicopter extends HeliPad {
+    static Point location;
+    private static int heli_radius;
+    private int heli_size;
+    private static int speed;
+    private static int angle;
+    private static int endX;
+    private static int endY;
+    private static int startX;
+    private static int startY;
 
-    public void addKeyListener(int keyCode, ActionListener listener){
+
+    public Helicopter(){
+        location = new Point(Game.Disp_W/2, Game.Disp_H/2);
+        heli_size = 35;
+        heli_radius = heli_size / 2;
+        angle = (int) Math.toRadians(90);
+        endX = centerLocation.getX();
+        endY = centerLocation.getY() - heli_radius*3 ;
+        startX = centerLocation.getX();
+        startY = centerLocation.getY();
+    }
+    public static void movement(int input){
+        /*
+        movements
+        */
+        switch(input){
+            case -92 /* back */:
+                if(speed > 10){
+                    speed--;
+                }
+            case -91:
+                if (speed < 10) {
+                    speed++;
+                }
+            case -93 /*Left*/:
+                angle += Math.toRadians(15);
+                endX= (int)(centerLocation.getX() + Math.sin(angle)+ heli_radius *3);
+                endY = (int) (centerLocation.getY() - Math.cos(angle) + heli_radius * 3);
+            case -94 /*Right */:
+                angle -= Math.toRadians(15);
+                endY = (int)(centerLocation.getY() - Math.cos(angle) + heli_radius *3);
+                endX = (int) (centerLocation.getX() + Math.sin(angle) + heli_radius * 3);
+            default: 
+                
+        }
 
     }
+    public static void updateForward(){
+        centerLocation.setX((int)(centerLocation.getX() + Math.cos(angle) * speed));
+        centerLocation.setY((int)(centerLocation.getY() - Math.cos(angle) * speed));
+        startX = centerLocation.getX();
+        startY = centerLocation.getY();
+        endY = (int)(centerLocation.getY() - Math.cos(angle) + heli_radius * 3);
+        endX = (int)(centerLocation.getX() + Math.sin(angle) + heli_radius * 3);
+    }
 
+    public void draw(Graphics g) {
+
+        g.setColor(ColorUtil.YELLOW);
+        g.fillArc(centerLocation.getX() - heli_radius, centerLocation.getY() - heli_radius, heli_size, heli_size, 0, 360);
+        
+        g.setColor(ColorUtil.CYAN);
+        g.drawLine(startX, startY, 
+                endX, endY);
+    }
 }
 
 class gameWorld {
@@ -111,6 +179,13 @@ class gameWorld {
 
     }
 
+    public void quit(){
+        Display.getInstance().exitApplication();
+    }
+    public void updateTick(){
+        Helicopter.updateForward();;
+    }
+
 }
 
 
@@ -123,10 +198,10 @@ class Fire {
     }
 
     public void draw(Graphics g) {
-        int radius = 100;
+      //  int radius = 100;
 
         g.setColor(ColorUtil.MAGENTA);
-        g.fillArc(x, y, width, height, 0, 360);
+      //  g.fillArc(x, y, width, height, 0, 360);
 
     }
 
@@ -140,49 +215,35 @@ class Fire {
 
 }
 
-class Helicopter {
-    Point location;
-
-    public Helicopter(){
-        location = new Point(Game.Disp_W/2, Game.Disp_H/2);
-    }
-
-    public void draw(Graphics g) {
-
-        g.setColor(ColorUtil.YELLOW);
-        g.fillArc(location.getX()*(25/100),
-                    Game.getMin_disp() / 2
-                        + 775, 35, 35, 0, 360);
-        
-        g.setColor(ColorUtil.YELLOW);
-        g.drawLine(Game.Disp_W/2 , Game.Disp_H, Game.Disp_W + 15, Game.Disp_H);
-    }
-}
 
 class HeliPad {
     Point location;
-
+    static Point centerLocation;
+    private int boxSize;
+    private int padSize;
+    private int radius;
     public HeliPad(){
-        location = new Point(Game.Disp_W / 2, Game.Disp_H / 2);
+        boxSize = 200;
+        padSize = 150;
+        radius = padSize / 2;
+        location = new Point((Game.Disp_W / 2) - 100, (Game.getMin_disp() / 2) + 700);
+        centerLocation = new Point(location.getX() + boxSize /2 , location.getY() + boxSize /2);
     }
-
+    public Point getCenter(){
+        return centerLocation;
+    }
     public void draw(Graphics g) {
         /*
             Helipad border design
         */
         g.setColor(ColorUtil.GRAY);
-        g.drawRect(
-                location.getX() - 100,
-                ((Game.getMin_disp() / 2) + 700),
+        g.drawRect(location.getX(), location.getY(),
                 200, 200);
         /*
             Helipad inner circle design 
          */
         g.setColor(ColorUtil.GRAY);
-        g.drawArc((Game.Disp_W / 2 ) - 75,
-                   ((Game.Disp_H / 2)+725), 
-        150, 150,
-        0, 360);
+        g.drawArc(centerLocation.getX() - radius, centerLocation.getY() - radius, padSize, padSize, 0, 360);
     }
 
 }
