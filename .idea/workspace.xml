@@ -13,24 +13,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="updated movements and added tick method">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="updating river movements and working fire object">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/AppMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/AppMain.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Fire.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Fire.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Game.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/HeliPad.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/HeliPad.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Helicopter.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Helicopter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/River.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/River.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/gameWorld.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/gameWorld.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/codenameone/simulator.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/target/compliance-check.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/compliance-check.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT.zip" beforeDir="false" afterPath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT/HornetsHFD-A1-javase-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT/HornetsHFD-A1-javase-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT/libs/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/javase/target/HornetsHFD-A1-javase-1.0-SNAPSHOT/libs/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javase/target/libs/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/javase/target/libs/HornetsHFD-A1-common-1.0-SNAPSHOT.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -828,7 +819,7 @@
       <workItem from="1644726348669" duration="99000" />
       <workItem from="1644726477936" duration="1250000" />
       <workItem from="1644783203591" duration="2597000" />
-      <workItem from="1644797410952" duration="7170000" />
+      <workItem from="1644797410952" duration="12375000" />
     </task>
     <task id="LOCAL-00001" summary="updated movements and added tick method">
       <created>1644727135868</created>
@@ -856,7 +847,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="updated movements and added tick method" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated movements and added tick method" />
+    <MESSAGE value="updating river movements and working fire object" />
+    <option name="LAST_COMMIT_MESSAGE" value="updating river movements and working fire object" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

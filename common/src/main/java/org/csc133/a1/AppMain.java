@@ -44,6 +44,7 @@ public class AppMain extends Lifecycle {
 
 class Game extends Form implements Runnable {
 
+
     final static int Disp_H = Display.getInstance().getDisplayHeight();
     final static int Disp_W = Display.getInstance().getDisplayWidth();
     static Font font = Font.createSystemFont(Font.FACE_SYSTEM,
@@ -172,13 +173,18 @@ class Helicopter extends HeliPad {
     }
 
     public static void isCollison() {
-        if ((-startX < river_location.getX() && startY < river_location.getY()) && (startX > 256 && startY > 5464)) {
-            isColliding = true;
+        if (startX > river_location.getX() && startX < (river_location.getX() + river.get_river_width())){
+            if(startY > river_location.getY()&& startY < river_location.getY() + river.get_river_height()){
+                isColliding = true;
+            }
+        }
+        else{
+            isColliding = false;
         }
     }
 
     public static void fillTank() {
-        if (isColliding && water_tank < 1000) {
+        if (isColliding && water_tank < 1000000) {
             water_tank += 100;
         }
     }
@@ -192,10 +198,20 @@ class Helicopter extends HeliPad {
         g.setColor(ColorUtil.CYAN);
         g.drawLine(startX, startY, endX, endY);
         g.drawString("Speed: " + speed, startX + 15, startY + 15);
+        g.drawString("X: " + startX, startX + 15, startY + 75);
+        g.drawString("Y: " + startY, startX + 15, startY + 125);
+        g.drawString("river Height: " + river.get_river_height(), (centerLocation.getX() + 400) - boxSize / 2, (centerLocation.getY() + 40) + boxSize / 2);
+        g.drawString("river Height: " + river.get_river_height(), (centerLocation.getX() + 400) - boxSize / 2,
+                (centerLocation.getY() + 40) + boxSize / 2);
+        g.drawString("river Width: " + river.get_river_width(), (centerLocation.getX() + 400) - boxSize / 2,
+                (centerLocation.getY() + 80) + boxSize / 2);
         g.setColor(ColorUtil.YELLOW);
         g.drawString("Water: " + water_tank,
                 centerLocation.getX() - boxSize / 2,
                 (centerLocation.getY() + 40) + boxSize / 2);
+
+        g.setColor(ColorUtil.GREEN);
+        g.drawRect(river_location.getX(), river_location.getY(), river.get_river_height(), river.get_river_width());
     }
 }
 
@@ -203,7 +219,7 @@ class gameWorld {
 
     private final Random random = new Random();
     private final int rand;
-    private final ArrayList<Fire> fires;
+    //private final ArrayList<Fire> fires;
     private final int fire_size_center;
     private final int fire_size_left;
     private final int fire_size_right;
@@ -245,7 +261,7 @@ class gameWorld {
         fire_center = new Fire(fire_size_center, location_center);
         fire_left = new Fire(fire_size_left, location_left);
         fire_right = new Fire(fire_size_right, location_right);
-        fires = new ArrayList<>();
+        //fires = new ArrayList<>();
         /*
          * Adding fire locations and sizes into fire class objects
          */
@@ -268,10 +284,6 @@ class gameWorld {
         fire_right.draw(g);
     }
 
-    public void draw(Graphics g, Fire fire) {
-
-    }
-
     public void quit() {
         Display.getInstance().exitApplication();
     }
@@ -279,7 +291,7 @@ class gameWorld {
     public void updateTick(int timer) {
         Helicopter.updateForward();
         Helicopter.isCollison();
-        if (timer % 2 == 0) {
+        if (timer % 8 == 0) {
             fire_center.grow_fire();
             fire_left.grow_fire();
             fire_right.grow_fire();
@@ -372,15 +384,19 @@ class HeliPad {
 
 class River {
     Point Location;
+    private int river_width;
+    private int river_height;
     //Height = 2048
     //Width = 2732
 
     public River() {
-        Location = new Point((-Game.Disp_W), Game.Disp_H / 5);
+        Location = new Point( 0, Game.Disp_H - 1700);
+        river_height = 300;
+        river_width = Game.Disp_W - 10;
 
         //For Debug purposes
-        System.out.println("Height" + Game.Disp_H);
-        System.out.println("Width" + Game.Disp_W);
+        System.out.println("Height: " + Game.Disp_H);
+        System.out.println("Width: " + Game.Disp_W);
         System.out.println("river x: " + Location.getX());
         System.out.println("river Y: " + Location.getY());
         System.out.println("Width rect: " + Game.Disp_W * 2);
@@ -392,21 +408,18 @@ class River {
     }
 
     public int get_river_width() {
-        return -Game.Disp_W;
+        return river_width;
     }
 
     public int get_river_height() {
-        return Game.Disp_H / 5;
+        return river_height;
     }
 
     public void draw(Graphics g) {
 
         g.setColor(ColorUtil.BLUE);
-        g.drawRect(Location.getX(), Location.getY(), Game.Disp_W * 2,
-                Game.Disp_H / 8);
-
-        g.setColor(ColorUtil.GREEN);
-        g.fillArc(Location.getX() / 20, Location.getY() / 20, 10, 10, 0, 360);
+        g.drawRect(Location.getX(), Location.getY(), river_width,
+                river_height);
     }
 
 }
