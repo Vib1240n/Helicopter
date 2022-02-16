@@ -173,16 +173,18 @@ class Helicopter extends HeliPad {
 
     public static void isCollison() {
         if (startX > river_location.getX() && startX < (river_location.getX() + river.get_river_width())){
-            if(startY > river_location.getY()&& startY < river_location.getY() + river.get_river_height()){
-                isColliding = true;
-            }
-            else {
-                isColliding = false;
-            }
+            isColliding = startY > river_location.getY() && startY < river_location.getY() + river.get_river_height();
         }
         else{
             isColliding = false;
         }
+    }
+    public static void isCollisionFire(){
+
+    }
+
+    public static void extinguishFire(){
+
     }
 
     public static void fillTank() {
@@ -228,45 +230,40 @@ class gameWorld {
     Fire fire_left;
 
     public gameWorld() {
-        /**
+        /*
          * Initiliazing variables
          */
         heli = new Helicopter();
         pad = new HeliPad();
         river = new River();
-        rand = random.nextInt(500) / 150;
+        rand = random.nextInt(200);
         /*
         Fire Locations
          */
-        location_left = new Point(HeliPad.centerLocation.getX() - Game.Disp_W/2,
-                HeliPad.centerLocation.getY() + Game.Disp_H);
-        location_right = new Point(HeliPad.centerLocation.getX() - 700, HeliPad.centerLocation.getY() - 700);
-        location_center = new Point(HeliPad.centerLocation.getX(), HeliPad.centerLocation.getY()+ 1000);
-        /*
-         * Fire Sizes
+        location_left = new Point((HeliPad.centerLocation.getX() - Game.Disp_H/2) +
+                rand, (HeliPad.centerLocation.getY() -  Game.Disp_W) + rand);
+        location_right = new Point((HeliPad.centerLocation.getX() - Game.Disp_H/2) +
+                rand, (HeliPad.centerLocation.getY() -  Game.Disp_W/3) + rand); //Showing up on screen
+        location_center = new Point((HeliPad.centerLocation.getX() + Game.Disp_H/8) +
+                rand, (HeliPad.centerLocation.getY() - Game.Disp_W/3) + rand);
+         /*
+         Fire Sizes
          */
-        fire_size_center = random.nextInt(500) + 300;
-        fire_size_left = random.nextInt(200) + 100;
-        fire_size_right = random.nextInt(500) + 200;
+        fire_size_center = random.nextInt(100) + 200;
+        fire_size_left = random.nextInt(100) + 150;
+        fire_size_right = random.nextInt(50) + 100;
         /*
          * Fires on the screen; class objects
          */
         fire_center = new Fire(fire_size_center, location_center);
         fire_left = new Fire(fire_size_left, location_left);
         fire_right = new Fire(fire_size_right, location_right);
-        //fires = new ArrayList<>();
-        /*
-         * Adding fire locations and sizes into fire class objects
-         */
-//        fires.add(fire_center);
-//        fires.add(fire_left);
-//        fires.add(fire_right);
-        //draw(g, fire_center);
+
 
     }
 
     /**
-     * @param g
+     *
      */
     public void draw(Graphics g) {
         river.draw(g);
@@ -298,9 +295,6 @@ class Fire {
     Point Location;
     private int fire_size;
 
-    public Fire() {
-    }
-
     public Fire(int fire_size, Point p) {
         Location = p;
         this.fire_size = fire_size;
@@ -321,6 +315,9 @@ class Fire {
         g.drawString("" + fire_size, Location.getX() + fire_size + 10,
                 Location.getY() + fire_size + 5);
 
+        g.setColor(ColorUtil.YELLOW);
+        g.drawString("x: "+Location.getX() + ", "+ "y: " + Location.getY(), Location.getX(), Location.getY() );
+
     }
 }
 
@@ -332,6 +329,9 @@ class HeliPad {
     protected int boxSize;
     Point location;
 
+    /*
+    Helipad constructor
+     */
     public HeliPad() {
         boxSize = 200;
         padSize = 150;
@@ -360,7 +360,7 @@ class HeliPad {
         g.drawString("Fuel", centerLocation.getX() - boxSize / 2,
                 (centerLocation.getY() + 5) + boxSize / 2);
         /*
-            Helipad inner circle design 
+            Helipad inner circle design
          */
         g.setColor(ColorUtil.GRAY);
         g.drawArc(centerLocation.getX() - radius,
@@ -369,6 +369,8 @@ class HeliPad {
 
 }
 
+
+//
 class River {
     Point Location;
     private final int river_width;
@@ -395,6 +397,9 @@ class River {
     public int get_river_height() {
         return river_height;
     }
+    /*
+    Draw method for river
+     */
 
     public void draw(Graphics g) {
 
@@ -404,5 +409,3 @@ class River {
     }
 
 }
-
-//
