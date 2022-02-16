@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="maven-antrun-" default="install-cn1">
   <target name="install-cn1">
-    <available file="/Users/vibhorsagar/.codenameone/guibuilder.jar" property="codenameone.present" />
-    <mkdir dir="/Users/vibhorsagar/.codenameone" />
-    <mkdir dir="/Users/vibhorsagar/Library/Mobile Documents/com~apple~CloudDocs/Development/HornetsHFD-A1/common/target/codenameone/tmpProject" />
-    <get skipexisting="true" src="https://www.codenameone.com/files/updates/UpdateCodenameOne.jar" dest="/Users/vibhorsagar/UpdateCodenameOne.jar" />
-    <java fork="true" jar="/Users/vibhorsagar/UpdateCodenameOne.jar">
-      <arg value="/Users/vibhorsagar/Library/Mobile Documents/com~apple~CloudDocs/Development/HornetsHFD-A1/common/target/codenameone/tmpProject" />
+    <available file="/Users/bb8/.codenameone/guibuilder.jar" property="codenameone.present" />
+    <mkdir dir="/Users/bb8/.codenameone" />
+    <mkdir dir="/Users/bb8/Library/Mobile Documents/com~apple~CloudDocs/Development/HornetsHFD-A1/common/target/codenameone/tmpProject" />
+    <get skipexisting="true" src="https://www.codenameone.com/files/updates/UpdateCodenameOne.jar" dest="/Users/bb8/UpdateCodenameOne.jar" />
+    <java fork="true" jar="/Users/bb8/UpdateCodenameOne.jar">
+      <arg value="/Users/bb8/Library/Mobile Documents/com~apple~CloudDocs/Development/HornetsHFD-A1/common/target/codenameone/tmpProject" />
       <arg value="force" />
     </java>
   </target>
