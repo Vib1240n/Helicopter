@@ -13,9 +13,16 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="Updated fire movements and randomized positions for 2 fires">
+    <list default="true" id="336d32c5-6f4b-4a8f-b637-9fea310958e7" name="Default Changelist" comment="updated formatted code for AppMain.java">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/src/main/java/org/csc133/a1/AppMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/AppMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/AppMain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Fire.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Fire.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Game.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Game.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/HeliPad.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/HeliPad.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Helicopter.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/Helicopter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/River.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/River.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/gameWorld.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/target/classes/org/csc133/a1/gameWorld.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,10 +106,11 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.14306152" />
-    <property name="settings.editor.selected.configurable" value="preferences.editor" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="ReaderModeSettings">
     <option name="showLigatures" value="true" />
@@ -834,7 +842,8 @@
       <workItem from="1644993087829" duration="64000" />
       <workItem from="1644993161599" duration="4966000" />
       <workItem from="1645046555277" duration="617000" />
-      <workItem from="1645047184603" duration="1577000" />
+      <workItem from="1645047184603" duration="2743000" />
+      <workItem from="1645052164499" duration="655000" />
     </task>
     <task id="LOCAL-00001" summary="updated movements and added tick method">
       <created>1644727135868</created>
@@ -850,7 +859,14 @@
       <option name="project" value="LOCAL" />
       <updated>1644997663502</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="updated formatted code for AppMain.java">
+      <created>1645050967208</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1645050967208</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -871,7 +887,8 @@
     <MESSAGE value="updated movements and added tick method" />
     <MESSAGE value="updating river movements and working fire object" />
     <MESSAGE value="Updated fire movements and randomized positions for 2 fires" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated fire movements and randomized positions for 2 fires" />
+    <MESSAGE value="updated formatted code for AppMain.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated formatted code for AppMain.java" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

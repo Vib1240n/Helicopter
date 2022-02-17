@@ -6,7 +6,6 @@ import com.codename1.ui.*;
 import com.codename1.ui.geom.Point;
 import com.codename1.ui.util.UITimer;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static com.codename1.ui.CN.*;
@@ -47,7 +46,7 @@ class Game extends Form implements Runnable {
 	final static int Disp_H = Display.getInstance().getDisplayHeight();
 	final static int Disp_W = Display.getInstance().getDisplayWidth();
 	static Font font = Font.createSystemFont(Font.FACE_SYSTEM,
-            Font.STYLE_PLAIN, SIZE_MEDIUM);
+			Font.STYLE_PLAIN, SIZE_SMALL);
 	private final gameWorld world;
 	UITimer timer;
 	private int tick;
@@ -63,6 +62,7 @@ class Game extends Form implements Runnable {
 		addKeyListener(-91, (evt) -> Helicopter.movement(-91));
 		addKeyListener(-92, (evt) -> Helicopter.movement(-92));
 		addKeyListener('d', (evt) -> Helicopter.fillTank());
+		addKeyListener('f', (evt) -> Helicopter.extinguishFire());
 	}
 
 	public static int getMin_disp() {
@@ -82,7 +82,6 @@ class Game extends Form implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		int return_tick = Tick();
 		world.updateTick(return_tick);
 		repaint();
@@ -100,6 +99,10 @@ class Helicopter extends HeliPad {
 	static Point location;
 	static River river;
 	static Point river_location;
+	static Point fire_location;
+	static Fire fire;
+	private static int fire_size;
+	private static int fire_radius;
 	private static int heli_radius;
 	private static int speed;
 	private static double angle;
@@ -109,6 +112,8 @@ class Helicopter extends HeliPad {
 	private static int startY;
 	private static int water_tank;
 	private static boolean isColliding;
+	private static boolean isCollidingfire;
+	private static Random rand;
 	private final int heli_size;
 
 
@@ -116,6 +121,11 @@ class Helicopter extends HeliPad {
 		water_tank = 0;
 		isColliding = false;
 		river = new River();
+		fire = new Fire();
+		fire_location = fire.location();
+		fire_size = fire.size();
+		fire_radius = fire_size/2;
+		isCollidingfire = false;
 		river_location = river.getLocation();
 		location = centerLocation;
 		heli_size = 35;
@@ -125,6 +135,7 @@ class Helicopter extends HeliPad {
 		endY = location.getY() + heli_radius * 3;
 		startX = location.getX();
 		startY = location.getY();
+		rand = new Random();
 	}
 
 	public static void movement(int input) {
@@ -168,21 +179,28 @@ class Helicopter extends HeliPad {
 	}
 
 	public static void isCollison() {
-		if (startX > river_location.getX() && startX < (river_location.getX() +
-				river.get_river_width())) {
-			isColliding = startY > river_location.getY() && startY
-					< river_location.getY() + river.get_river_height();
+		if (startX > river_location.getX() && startX < (river_location.getX() + river.get_river_width())) {
+			isColliding =
+					startY > river_location.getY() && startY < river_location.getY() + river.get_river_height();
 		} else {
 			isColliding = false;
 		}
 	}
 
 	public static void isCollisionFire() {
-
+		if(startX > fire_location.getX() && startX < ( fire_location.getX() + fire_size)){
+			isCollidingfire = 
+			startY > fire_location.getY() && startY < fire_location.getY() + fire_size;
+		}else{
+			isCollidingfire = false;
+		}
 	}
 
 	public static void extinguishFire() {
-
+		if( isCollidingfire && fire_size > 0){
+			fire_size -= Math.min(water_tank/5, rand.nextInt(water_tank/3));
+			water_tank -= 100;
+		}
 	}
 
 	public static void fillTank() {
@@ -196,7 +214,7 @@ class Helicopter extends HeliPad {
 		g.setFont(Game.font);
 		g.setColor(ColorUtil.YELLOW);
 		g.fillArc(startX - heli_radius, startY - heli_radius, heli_size,
-                heli_size, 0, 360);
+				heli_size, 0, 360);
 		g.setColor(ColorUtil.YELLOW);
 		g.drawLine(startX, startY, endX, endY);
 		g.drawString("Speed: " + speed, startX + 15, startY + 15);
@@ -204,8 +222,8 @@ class Helicopter extends HeliPad {
 
 		g.setColor(ColorUtil.YELLOW);
 		g.drawString("Water: " + water_tank,
-                centerLocation.getX() - boxSize / 2,
-                (centerLocation.getY() + 40) + boxSize / 2);
+				centerLocation.getX() - boxSize / 2,
+				(centerLocation.getY() + 40) + boxSize / 2);
 	}
 }
 
@@ -237,15 +255,12 @@ class gameWorld {
         /*
         Fire Locations
          */
-		location_left = new Point((HeliPad.centerLocation.getX() -
-				Game.Disp_H / 2) + rand, (HeliPad.centerLocation.getY() -
-				Game.Disp_W) + rand);
-		location_right = new Point((HeliPad.centerLocation.getX() -
-				Game.Disp_H / 2) + rand, (HeliPad.centerLocation.getY() -
-				Game.Disp_W / 3) + rand); //Showing up on screen
-		location_center = new Point((HeliPad.centerLocation.getX() +
-				Game.Disp_H / 8) + rand, (HeliPad.centerLocation.getY() -
-				Game.Disp_W / 3) + rand);
+		location_left =
+				new Point((HeliPad.centerLocation.getX() - Game.Disp_H / 2) + rand, (HeliPad.centerLocation.getY() - Game.Disp_W) + rand);
+		location_right =
+				new Point((HeliPad.centerLocation.getX() - Game.Disp_H / 2) + rand, (HeliPad.centerLocation.getY() - Game.Disp_W / 3) + rand); //Showing up on screen
+		location_center =
+				new Point((HeliPad.centerLocation.getX() + Game.Disp_H / 8) + rand, (HeliPad.centerLocation.getY() - Game.Disp_W / 3) + rand);
          /*
          Fire Sizes
          */
@@ -258,8 +273,6 @@ class gameWorld {
 		fire_center = new Fire(fire_size_center, location_center);
 		fire_left = new Fire(fire_size_left, location_left);
 		fire_right = new Fire(fire_size_right, location_right);
-
-
 	}
 
 	/**
@@ -281,6 +294,7 @@ class gameWorld {
 	public void updateTick(int timer) {
 		Helicopter.updateForward();
 		Helicopter.isCollison();
+		Helicopter.isCollisionFire();
 		if (timer % 8 == 0) {
 			fire_center.grow_fire();
 			fire_left.grow_fire();
@@ -295,10 +309,22 @@ class Fire {
 	Point Location;
 	private int fire_size;
 
+	public Fire(){
+		//Empty Contructor 
+	}
+
 	public Fire(int fire_size, Point p) {
 		Location = p;
 		this.fire_size = fire_size;
 
+	}
+
+	public Point location(){
+		return Location;
+	}
+
+	public int size(){
+		return fire_size;
 	}
 
 	public void grow_fire() {
@@ -309,15 +335,15 @@ class Fire {
 
 	public void draw(Graphics g) {
 		g.setColor(ColorUtil.MAGENTA);
-		g.fillArc(Location.getX(), Location.getY(), fire_size,
-				fire_size, 0, 360);
+		g.fillArc(Location.getX(), Location.getY(), fire_size, fire_size, 0,
+				360);
 		g.setFont(Game.font);
 		g.drawString("" + fire_size, Location.getX() + fire_size + 10,
-                Location.getY() + fire_size + 5);
+				Location.getY() + fire_size + 5);
 
 		g.setColor(ColorUtil.YELLOW);
-		g.drawString("x: " + Location.getX() + ", " + "y: " +
-						Location.getY(), Location.getX(), Location.getY());
+		g.drawString("x: " + Location.getX() + ", " + "y: " + Location.getY(),
+				Location.getX(), Location.getY());
 
 	}
 }
@@ -338,9 +364,9 @@ class HeliPad {
 		padSize = 150;
 		radius = padSize / 2;
 		location = new Point((Game.Disp_W / 2) - 25,
-                (Game.getMin_disp() / 2) + 500);
+				(Game.getMin_disp() / 2) + 500);
 		centerLocation = new Point(location.getX() + boxSize / 2,
-                location.getY() + boxSize / 2);
+				location.getY() + boxSize / 2);
 	}
 
 	public Point getCenter() {
@@ -359,14 +385,13 @@ class HeliPad {
 		 */
 		g.setColor(ColorUtil.YELLOW);
 		g.drawString("Fuel", centerLocation.getX() - boxSize / 2,
-                (centerLocation.getY() + 5) + boxSize / 2);
+				(centerLocation.getY() + 5) + boxSize / 2);
         /*
             Helipad inner circle design
          */
 		g.setColor(ColorUtil.GRAY);
 		g.drawArc(centerLocation.getX() - radius,
-                centerLocation.getY() - radius, padSize, padSize,
-				0, 360);
+				centerLocation.getY() - radius, padSize, padSize, 0, 360);
 	}
 
 }
@@ -406,7 +431,7 @@ class River {
 
 		g.setColor(ColorUtil.BLUE);
 		g.drawRect(Location.getX(), Location.getY(), river_width,
-                river_height);
+				river_height);
 	}
 
 }
