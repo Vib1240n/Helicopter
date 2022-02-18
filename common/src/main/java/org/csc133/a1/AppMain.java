@@ -109,6 +109,7 @@ class Helicopter extends HeliPad {
 	// private static int fire_size;
 	// private static int fire_radius;
 	private static int heli_radius;
+	private static float fuel;
 	private static int speed;
 	private static double angle;
 	private static int endX;
@@ -140,6 +141,7 @@ class Helicopter extends HeliPad {
 		startX = location.getX();
 		startY = location.getY();
 		rand = new Random();
+		fuel = 12000;
 	}
 
 	public static void movement(int input) {
@@ -184,6 +186,9 @@ class Helicopter extends HeliPad {
 		startY = location.getY();
 		endY = (int) (location.getY() - Math.sin(angle));
 		endX = (int) (location.getX() + Math.cos(angle) + heli_radius * 3);
+		fuel -= Math.max(startX, startY) * Math.tan(angle);
+		setFuel(fuel);
+		
 	}
 
 	public static void isCollison() {
@@ -212,6 +217,14 @@ class Helicopter extends HeliPad {
 		if (isColliding && water_tank < 1000) {
 			water_tank += 100;
 		}
+	}
+
+	public static int getFuel(){
+		return (int)fuel;
+	}
+
+	protected static void setFuel(float fuel){
+		fuel = fuel;
 	}
 
 	public void draw(Graphics g) {
@@ -316,9 +329,12 @@ class gameWorld extends Form {
 
 }
 
-// class Display extends Form{
+// class PopDisplay extends Form{
 // Dialog d;
-//
+
+// 	public PopDisplay(Helicopter heli){
+// 		if(heli.)
+// 	}
 // }
 class Fire {
 	Point Location;
@@ -384,6 +400,7 @@ class HeliPad {
 	private final int padSize;
 	private final int radius;
 	protected int boxSize;
+	protected double fuel;
 	Point location;
 
 	/*
@@ -397,10 +414,15 @@ class HeliPad {
 				(Game.getMin_disp() / 2) + 500);
 		centerLocation = new Point(location.getX() + boxSize / 2,
 				location.getY() + boxSize / 2);
+		fuel = 12000.0;
 	}
 
 	public Point getCenter() {
 		return centerLocation;
+	}
+
+	protected static void setFuel(float fuel) {
+		fuel = fuel;
 	}
 
 	public void draw(Graphics g) {
@@ -414,7 +436,7 @@ class HeliPad {
 		 * Fuel label drawing
 		 */
 		g.setColor(ColorUtil.YELLOW);
-		g.drawString("Fuel", centerLocation.getX() - boxSize / 2,
+		g.drawString("Fuel: " + (int)fuel, centerLocation.getX() - boxSize / 2,
 				(centerLocation.getY() + 5) + boxSize / 2);
 		/*
 		 * Helipad inner circle design
