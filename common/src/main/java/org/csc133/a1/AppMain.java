@@ -62,7 +62,7 @@ class Game extends Form implements Runnable {
 		addKeyListener(-91, (evt) -> Helicopter.movement(-91));
 		addKeyListener(-92, (evt) -> Helicopter.movement(-92));
 		addKeyListener('d', (evt) -> Helicopter.fillTank());
-		addKeyListener('f', (evt) -> Helicopter.extinguishFire());
+		addKeyListener('f', (evt) -> Fire.extinguishFire());
 	}
 
 	public static int getMin_disp() {
@@ -100,9 +100,9 @@ class Helicopter extends HeliPad {
 	static River river;
 	static Point river_location;
 	static Point fire_location;
-	static Fire fire;
-	private static int fire_size;
-	private static int fire_radius;
+	// static Fire fire;
+	// private static int fire_size;
+	// private static int fire_radius;
 	private static int heli_radius;
 	private static int speed;
 	private static double angle;
@@ -121,10 +121,10 @@ class Helicopter extends HeliPad {
 		water_tank = 0;
 		isColliding = false;
 		river = new River();
-		fire = new Fire();
-		fire_location = fire.location();
-		fire_size = fire.size();
-		fire_radius = fire_size/2;
+		// fire = new Fire();
+		// fire_location = fire.location();
+		// fire_size = fire.size();
+		//fire_radius = fire_size/2;
 		isCollidingfire = false;
 		river_location = river.getLocation();
 		location = centerLocation;
@@ -169,6 +169,10 @@ class Helicopter extends HeliPad {
 
 	}
 
+	public int water_tank(){
+		return water_tank;
+	}
+
 	public static void updateForward() {
 		location.setX((int) (location.getX() + Math.cos(angle) * speed));
 		location.setY((int) (location.getY() - Math.sin(angle) * speed));
@@ -187,20 +191,19 @@ class Helicopter extends HeliPad {
 		}
 	}
 
-	public static void isCollisionFire() {
-		if(startX > fire_location.getX() && startX < ( fire_location.getX() + fire_size)){
+	public static void isCollisionFire(Fire fire) {
+		
+		if(startX > fire.location().getX() && startX < ( fire.location().getX() + fire.size())){
 			isCollidingfire = 
-			startY > fire_location.getY() && startY < fire_location.getY() + fire_size;
+			startY > fire.location().getY() && startY < fire.location().getY() + fire.size();
+			if(isCollidingfire && fire.size() > 0){
+				fire.extinguishFire();
+				water_tank -= 100;
+			}
 		}else{
 			isCollidingfire = false;
 		}
-	}
-
-	public static void extinguishFire() {
-		if( isCollidingfire && fire_size > 0){
-			fire_size -= Math.min(water_tank/5, rand.nextInt(water_tank/3));
-			water_tank -= 100;
-		}
+		isCollidingfire = true;
 	}
 
 	public static void fillTank() {
@@ -294,7 +297,9 @@ class gameWorld {
 	public void updateTick(int timer) {
 		Helicopter.updateForward();
 		Helicopter.isCollison();
-		Helicopter.isCollisionFire();
+		Helicopter.isCollisionFire(fire_center);
+		Helicopter.isCollisionFire(fire_left);
+		Helicopter.isCollisionFire(fire_right);
 		if (timer % 8 == 0) {
 			fire_center.grow_fire();
 			fire_left.grow_fire();
@@ -304,13 +309,20 @@ class gameWorld {
 
 }
 
+class Display extends Form{
+	Dialog d;
 
+}
 class Fire {
 	Point Location;
-	private int fire_size;
+	private static Random rand;
+	private static Helicopter heli;
+	private static int fire_size;
 
 	public Fire(){
 		//Empty Contructor 
+		rand = new Random();
+		heli = new Helicopter();
 	}
 
 	public Fire(int fire_size, Point p) {
@@ -331,6 +343,10 @@ class Fire {
 		if (fire_size < 470) {
 			fire_size += new Random().nextInt(5);
 		}
+	}
+
+	public static void extinguishFire(){
+		fire_size -= Math.min(heli.water_tank() / 5, rand.nextInt(heli.water_tank() / 3));
 	}
 
 	public void draw(Graphics g) {
